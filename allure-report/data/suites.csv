@@ -1,2 +1,4 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"Test Payer Name Field Validation","31387","Test Empty Payer Name Validation","testCases","Mon Mar 17 17:22:56 IST 2025","broken","Mon Mar 17 17:23:27 IST 2025","TestClientValidation","errorMessageValidation_test","",""
+"Test Payer Name Field Validation","29328","Test Empty Payer Name Validation","","Tue Mar 18 12:33:56 IST 2025","passed","Tue Mar 18 12:34:25 IST 2025","","","",""
+"Test Payer Name Field Validation","6447","Test Empty Payer Name Validation","testCases","Tue Mar 18 13:13:56 IST 2025","broken","Tue Mar 18 13:14:02 IST 2025","TestClientValidation","errorMessageValidation_test","",""
+"Test Payer Name Field Validation","24758","Test Empty Payer Name Validation","","Tue Mar 18 12:46:35 IST 2025","passed","Tue Mar 18 12:47:00 IST 2025","","","",""

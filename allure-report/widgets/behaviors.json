@@ -1,1 +1,1 @@
-{"total":1,"items":[{"uid":"e01de1fd33631805ad5cd69da3630524","name":"Payment Gateway","statistic":{"failed":0,"broken":1,"skipped":0,"passed":0,"unknown":0,"total":1}}]}
+{"total":3,"items":[{"uid":"e01de1fd33631805ad5cd69da3630524","name":"Payment Gateway","statistic":{"failed":0,"broken":1,"skipped":0,"passed":0,"unknown":0,"total":1}}]}

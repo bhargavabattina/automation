@@ -38,7 +38,7 @@ jobs:
         if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.AUTOMATION }}
+          github_token: ${{ secrets.GH_PAT }}
           publish_dir: ./allure-report
           publish_branch: gh-pages  # ✅ Ensure it pushes to the `gh-pages` branch
           force_orphan: true         # ✅ Creates branch if it doesn’t exist
@@ -46,3 +46,6 @@ jobs:
       - name: Add report link to GitHub summary
         if: always()
         run: echo "### ✅ [View Allure Report](https://bhargavabattina.github.io/automation/allure-report/index.html)" >> $GITHUB_STEP_SUMMARY
+
+permissions:
+  contents: write  # Ensures write access for deployment

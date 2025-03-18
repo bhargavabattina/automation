@@ -1,3 +1,4 @@
+
 name: Run Pytest and Deploy Allure Report
 
 on:
@@ -21,8 +22,12 @@ jobs:
 
       - name: 📦 Install Dependencies
         run: |
+          pip install -r requirements.txt
+          pip install allure-pytest pytest-playwright
+          npm install -g allure-commandline
+          playwright install
           python -m pip install --upgrade pip
-          pip install pytest allure-pytest
+          
 
       - name: 🚀 Run Pytest and Generate Allure Results
         run: |
@@ -55,3 +60,4 @@ jobs:
 
 permissions:
   contents: write
+

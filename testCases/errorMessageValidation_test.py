@@ -1,3 +1,5 @@
+import time
+
 import pytest
 import allure
 from pageObjects.Client_test import ClientTest
@@ -24,6 +26,10 @@ class TestClientValidation:
 
             with allure.step("Clicking Show Detail"):
                 page_with_screenshot.click_show_detail()
+
+            if "Verifying you are human" in page.content():
+                print("Cloudflare challenge detected mid-test. Waiting for it to resolve...")
+                page.wait_for_timeout(10000)
 
             with allure.step("Entering Payment Details"):
                 page_with_screenshot.fill_amount("10")

@@ -23,6 +23,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install allure-pytest pytest-playwright
+          npm install -g allure-commandline
           playwright install
 
       - name: Run Playwright tests and collect Allure results
@@ -31,7 +32,7 @@ jobs:
 
       - name: Generate Allure Report
         if: always()
-        run: allure generate allure-results --clean -o allure-report
+        run: npx allure generate allure-results --clean -o allure-report
 
       - name: Deploy Allure Report to GitHub Pages
         if: always()

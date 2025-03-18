@@ -9,12 +9,13 @@ import allure
 from playwright.sync_api import sync_playwright, Page
 from pageObjects.Client_test import ClientTest
 
+
 @pytest.fixture(scope="function")
 def browser():
     """Fixture to launch the browser and create a new context"""
     with sync_playwright() as p:
-        # browser = p.chromium.launch(headless=False, slow_mo=300)
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(headless=False, slow_mo=300)
+        #browser = p.chromium.launch()
         video_dir = "videos/"
         if not os.path.exists(video_dir):
             os.makedirs(video_dir, exist_ok=True)
@@ -32,6 +33,7 @@ def browser():
 def client_detail_page(browser):
     """Fixture to initialize the Client Test Page"""
     page = browser.new_page()  # ✅ Fix: Use `browser.new_page()`
+
     page.goto("https://securetest.sabpaisa.in/ClientTest")
     yield ClientTest(page)
     page.close()

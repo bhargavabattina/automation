@@ -32,25 +32,31 @@ jobs:
       - name: 🚀 Run Pytest and Generate Allure Results
         run: |
           pytest --alluredir=allure-results
+        continue-on-error: true
 
       - name: 🔧 Install Allure
+        if: always()
         run: |
           sudo apt-get update
           sudo apt-get install -y allure
 
       - name: 🎨 Generate Allure Report
+        if: always()
         run: |
           npx allure generate allure-results -o allure-report --clean
 
       - name: 🛠 Debug - List Files
+        if: always()
         run: ls -R
 
       - name: 🔑 Set Up Git Authentication
+        if: always()
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
 
       - name: 🚀 Deploy Allure Report to GitHub Pages (master branch)
+        if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

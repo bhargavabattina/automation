@@ -27,15 +27,19 @@ jobs:
 
       - name: Run Playwright tests and collect Allure results
         run: pytest --alluredir=allure-results
+        continue-on-error: true
 
       - name: Generate Allure Report
+        if: always()
         run: allure generate allure-results --clean -o allure-report
 
       - name: Deploy Allure Report to GitHub Pages
+        if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./allure-report
 
       - name: Add report link to GitHub summary
+        if: always()
         run: echo "### ✅ [View Allure Report](https://bhargavabattina.github.io/automation/allure-report/index.html)" >> $GITHUB_STEP_SUMMARY

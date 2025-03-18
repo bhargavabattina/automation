@@ -25,10 +25,11 @@ jobs:
           pip install allure-pytest pytest-playwright
           playwright install
 
-      - name: Run Playwright tests and generate Allure results
-        run: |
-          pytest --alluredir=allure-results
-          allure generate allure-results --clean -o allure-report
+      - name: Run Playwright tests and collect Allure results
+        run: pytest --alluredir=allure-results
+
+      - name: Generate Allure Report
+        run: allure generate allure-results --clean -o allure-report
 
       - name: Deploy Allure Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

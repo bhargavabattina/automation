@@ -1,0 +1,6 @@
+{
+  "name": "custom-title-plugin",
+  "description": "A plugin to customize the Allure report title and logo",
+  "jsFiles": ["custom-title.js"],
+  "cssFiles": ["custom-title.css"]
+}

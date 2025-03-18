@@ -1,0 +1,12 @@
+.side-nav__brand {
+  background: url('sabpaisalogo.png') no-repeat left center !important;
+  background-size: contain !important;
+  height: 50px; /* Adjust height as needed */
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* Hide the default Allure text */
+.side-nav__brand-text {
+  display: none;
+}

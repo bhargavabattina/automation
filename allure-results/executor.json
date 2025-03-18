@@ -1,0 +1,7 @@
+{
+  "name": "Automation Execution",
+  "type": "CI/CD Pipeline",
+  "url": "https://ci.example.com/job/123/",
+  "buildOrder": "Build #123",
+  "reportName": "My Custom Summary Report"
+}

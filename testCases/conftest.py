@@ -13,7 +13,8 @@ from pageObjects.Client_test import ClientTest
 def browser():
     """Fixture to launch the browser and create a new context"""
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False, slow_mo=300)
+        # browser = p.chromium.launch(headless=False, slow_mo=300)
+        browser = p.chromium.launch()
         video_dir = "videos/"
         if not os.path.exists(video_dir):
             os.makedirs(video_dir, exist_ok=True)

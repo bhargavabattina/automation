@@ -21,13 +21,12 @@ class TestClientValidation:
             with allure.step("Filling Client Code"):
                 page_with_screenshot.fill_client_code("LPSD1")
 
+
             with allure.step("Selecting Environment"):
                 page_with_screenshot.select_environment("STAGING")
 
             with allure.step("Clicking Show Detail"):
                 page_with_screenshot.click_show_detail()
-
-
 
             with allure.step("Entering Payment Details"):
                 page_with_screenshot.fill_amount("10")

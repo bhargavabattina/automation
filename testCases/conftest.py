@@ -8,7 +8,7 @@ import time
 import allure
 from playwright.sync_api import sync_playwright, Page
 from pageObjects.Client_test import ClientTest
-import subprocess  # To run allure commands
+import cloudscraper
 
 # Report directory configuration
 REPORT_DIR = "reports"
@@ -24,30 +24,48 @@ TEAMS_WEBHOOK_URL = "https://srslivetech.webhook.office.com/webhookb2/e16c66cb-8
 
 @pytest.fixture(scope="function")
 def browser():
-    """Fixture to launch the browser and create a new context"""
+    """Fixture to launch the browser, bypass Cloudflare, and create a new context"""
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False, slow_mo=300)
-        #browser = p.chromium.launch()
+
+        # Create video directory
         video_dir = "videos/"
         if not os.path.exists(video_dir):
             os.makedirs(video_dir, exist_ok=True)
         print(f"🎥 Video directory: {os.path.abspath(video_dir)}")
 
-        context = browser.new_context(record_video_dir=video_dir)  # Ensure correct path
-        yield context
+        # Step 1: Use cloudscraper to get Cloudflare cookies
+        scraper = cloudscraper.create_scraper()
+        response = scraper.get("http://localhost:8080/ClientTest/")
+
+        # Extract cookies from the response
+        cookie_jar = scraper.cookies
+        playwright_cookies = [
+            {"name": cookie.name, "value": cookie.value, "domain": ".securetest.sabpaisa.in", "path": "/"}
+            for cookie in cookie_jar
+        ]
+
+        # Step 2: Create a new browser context with cookies
+        context = browser.new_context(record_video_dir=video_dir)
+        context.add_cookies(playwright_cookies)  # ✅ Apply Cloudflare-bypassed cookies
+
+        yield context  # Provide the context for tests
+
         context.close()
         browser.close()
 
 
-
-
 @pytest.fixture
 def client_detail_page(browser):
-    """Fixture to initialize the Client Test Page"""
-    page = browser.new_page()  # ✅ Fix: Use `browser.new_page()`
+    """Fixture to initialize the Client Test Page with Cloudflare bypass"""
+    page = browser.new_page()
 
-    page.goto("https://securetest.sabpaisa.in/ClientTest")
+    page.goto("https://securetest.sabpaisa.in/ClientTest", wait_until="networkidle")
+    page.mouse.move(100, 200)
+    page.mouse.down()
+    page.mouse.up()
     yield ClientTest(page)
+
     page.close()
 
 
@@ -131,34 +149,34 @@ def pytest_runtest_makereport(item, call):
 
 
 
-@pytest.hookimpl(trylast=True)
-def pytest_sessionfinish(session, exitstatus):
-    """Generate Allure report and send a webhook notification to Teams."""
-    print("📢 Generating Allure Report...")
-
-    # # Generate Allure report
-    # try:
-    #     subprocess.run(["allure", "generate", ALLURE_RESULTS_DIR, "-o", ALLURE_REPORT_DIR, "--clean"], check=True)
-    #     print("✅ Allure report generated successfully!")
-    # except subprocess.CalledProcessError as e:
-    #     print(f"❌ Failed to generate Allure report: {e}")
-    #     return
-
-    # Prepare and send webhook notification
-    report_url = "https://bhargavabattina.github.io/automation/allure-report/index.html"  # Local report URL
-
-    try:
-        message = {
-            "text": f"✅ Test Execution Completed!\n\n📊 **Payment Gateway Test Report:** [View Report]({report_url})"
-        }
-        headers = {"Content-Type": "application/json"}
-        response = requests.post(TEAMS_WEBHOOK_URL, data=json.dumps(message), headers=headers)
-
-        if response.status_code == 200:
-            print("📩 Teams notification sent successfully!")
-        else:
-            print(f"❌ Failed to send Teams notification. Status code: {response.status_code}")
-            print(response.text)
-
-    except Exception as e:
-        print(f"❌ Error sending Teams notification: {e}")
+# @pytest.hookimpl(trylast=True)
+# def pytest_sessionfinish(session, exitstatus):
+#     """Generate Allure report and send a webhook notification to Teams."""
+#     print("📢 Generating Allure Report...")
+#
+#     # # Generate Allure report
+#     # try:
+#     #     subprocess.run(["allure", "generate", ALLURE_RESULTS_DIR, "-o", ALLURE_REPORT_DIR, "--clean"], check=True)
+#     #     print("✅ Allure report generated successfully!")
+#     # except subprocess.CalledProcessError as e:
+#     #     print(f"❌ Failed to generate Allure report: {e}")
+#     #     return
+#
+#     # Prepare and send webhook notification
+#     report_url = "https://bhargavabattina.github.io/automation/allure-report/index.html"  # Local report URL
+#
+#     try:
+#         message = {
+#             "text": f"✅ Test Execution Completed!\n\n📊 **Payment Gateway Test Report:** [View Report]({report_url})"
+#         }
+#         headers = {"Content-Type": "application/json"}
+#         response = requests.post(TEAMS_WEBHOOK_URL, data=json.dumps(message), headers=headers)
+#
+#         if response.status_code == 200:
+#             print("📩 Teams notification sent successfully!")
+#         else:
+#             print(f"❌ Failed to send Teams notification. Status code: {response.status_code}")
+#             print(response.text)
+#
+#     except Exception as e:
+#         print(f"❌ Error sending Teams notification: {e}")

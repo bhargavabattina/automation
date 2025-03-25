@@ -43,6 +43,7 @@ jobs:
       - name: 🎨 Generate Allure Report
         if: always()
         run: |
+          cp -r allure-report/history allure-results/
           npx allure generate allure-results -o allure-report --clean
           cp allure-custom/sabpaisalogo.png allure-report/
           cp allure-plugin/custom-title-plugin/custom-title.css allure-report/

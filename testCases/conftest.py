@@ -7,7 +7,7 @@ import json
 import time
 import allure
 from playwright.sync_api import sync_playwright, Page
-from pageObjects.Client_test import ClientTest
+
 import cloudscraper
 
 # Report directory configuration
@@ -26,29 +26,14 @@ TEAMS_WEBHOOK_URL = "https://srslivetech.webhook.office.com/webhookb2/e16c66cb-8
 def browser():
     """Fixture to launch the browser, bypass Cloudflare, and create a new context"""
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False, slow_mo=300)
-
+        #browser = p.chromium.launch(headless=False, slow_mo=300)
+        browser = p.chromium.launch()
         # Create video directory
         video_dir = "videos/"
         if not os.path.exists(video_dir):
             os.makedirs(video_dir, exist_ok=True)
         print(f"🎥 Video directory: {os.path.abspath(video_dir)}")
-
-        # Step 1: Use cloudscraper to get Cloudflare cookies
-        scraper = cloudscraper.create_scraper()
-        response = scraper.get("http://localhost:8080/ClientTest/")
-
-        # Extract cookies from the response
-        cookie_jar = scraper.cookies
-        playwright_cookies = [
-            {"name": cookie.name, "value": cookie.value, "domain": ".securetest.sabpaisa.in", "path": "/"}
-            for cookie in cookie_jar
-        ]
-
-        # Step 2: Create a new browser context with cookies
         context = browser.new_context(record_video_dir=video_dir)
-        context.add_cookies(playwright_cookies)  # ✅ Apply Cloudflare-bypassed cookies
-
         yield context  # Provide the context for tests
 
         context.close()
@@ -56,23 +41,20 @@ def browser():
 
 
 @pytest.fixture
-def client_detail_page(browser):
+def page(browser):
     """Fixture to initialize the Client Test Page with Cloudflare bypass"""
     page = browser.new_page()
 
-    page.goto("https://securetest.sabpaisa.in/ClientTest", wait_until="networkidle")
-    page.mouse.move(100, 200)
-    page.mouse.down()
-    page.mouse.up()
-    yield ClientTest(page)
+    page.goto("https://settlepaisa-internal.sabpaisa.in/sign-in")
+    yield page
 
     page.close()
 
 
 @pytest.fixture
-def page_with_screenshot(client_detail_page: ClientTest, request):
+def page_with_screenshot(page, request):
     """Fixture to capture screenshots and attach videos to Allure"""
-    yield client_detail_page  # Allow test execution
+    yield page  # Allow test execution
 
     # Get test report from request
     outcome = request.node.__dict__.get("test_outcome", None)
@@ -80,18 +62,18 @@ def page_with_screenshot(client_detail_page: ClientTest, request):
 
     # Capture and attach screenshot
     allure.attach(
-        client_detail_page.page.screenshot(full_page=True),
+        page.screenshot(full_page=True),
         name=screenshot_name,
         attachment_type=allure.attachment_type.PNG,
     )
 
     # **Ensure page is closed before accessing the video**
-    client_detail_page.page.close()
+    page.close()
     time.sleep(2)
 
     # Capture video (ensure the page is closed before accessing `video.path()`)
-    if client_detail_page.page.video:
-        video_path = client_detail_page.page.video.path()
+    if page.video:
+        video_path = page.video.path()
         allure.attach.file(video_path, name="Test Execution Video", attachment_type=allure.attachment_type.WEBM)
 
 

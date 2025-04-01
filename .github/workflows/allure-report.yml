@@ -44,10 +44,6 @@ jobs:
         if: always()
         run: |
           npx allure generate allure-results -o allure-report --clean
-          cp allure-custom/sabpaisalogo.png allure-report/
-          cp allure-plugin/custom-title-plugin/custom.css allure-report/
-          sed -i '/<\/head>/i <link rel="stylesheet" type="text/css" href="custom.css">' allure-report/index.html
-          sed -i 's|<title>Allure Report</title>|<title>Payment Gateway Report</title>|' allure-report/index.html
 
       - name: 🛠 Debug - List Files
         if: always()

@@ -1,0 +1,7 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"Test Payer Name Field Validation","13544","Test Empty Payer Name Validation","testCases","Tue Mar 25 07:02:11 UTC 2025","broken","Tue Mar 25 07:02:25 UTC 2025","TestClientValidation","errorMessageValidation_test","",""
+"Test Payer Name Field Validation","30004","Correct Login Credentials Validation","testCases","Thu Apr 17 12:01:45 UTC 2025","broken","Thu Apr 17 12:02:15 UTC 2025","TestLoginValidation","login_test","",""
+"Test Payer Name Field Validation","30005","Wrong Login Credentials Validation","testCases","Thu Apr 17 12:02:17 UTC 2025","broken","Thu Apr 17 12:02:47 UTC 2025","TestLoginValidation","login_test","",""
+"Test Payer Name Field Validation","29328","Test Empty Payer Name Validation","","Tue Mar 18 07:03:56 UTC 2025","passed","Tue Mar 18 07:04:25 UTC 2025","","","",""
+"Test Payer Name Field Validation","22152","Test Empty Payer Name Validation","","Tue Mar 18 14:08:11 UTC 2025","passed","Tue Mar 18 14:08:33 UTC 2025","","","",""
+"Test Payer Name Field Validation","24758","Test Empty Payer Name Validation","","Tue Mar 18 07:16:35 UTC 2025","passed","Tue Mar 18 07:17:00 UTC 2025","","","",""
